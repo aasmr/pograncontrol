@@ -23,10 +23,17 @@ class ui(QWidget):
         self.setMinimumSize(self._width,self._height)
         self.setMaximumSize(self._width,self._height)
         self.setWindowTitle("Pograncotrol")
+        self.textScroll=QScrollArea(self)
+        self.textScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.textScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.textScroll.setWidgetResizable(True)
+        self.textScroll.setContentsMargins(10, 10, 10 , 10)
         self.gridBox=QGridLayout(self)
         self.gridBox.setContentsMargins(5, 5, 5, 5)
         
         self.mesText=QLabel(self)
+        self.mesText.setFont("Sans Serif")
+        self.mesText.setWordWrap(True)
         self.dateMesLabel=QLabel(self)
         self.mesText.setText("")
         self.mesText.setFixedWidth(500)
@@ -76,8 +83,10 @@ class ui(QWidget):
         self.exitBut=QPushButton(self)
         self.exitBut.setText("Выход")
         
-        self.gridBox.addWidget(self.mesText, 0, 1, 3, 1)
-        self.gridBox.addWidget(self.dateMesLabel, 3, 1, 17, 1)
+        self.gridBox.addWidget(self.dateMesLabel, 0, 1, 3, 1)
+        self.gridBox.addWidget(self.textScroll, 3, 1, 17, 1)
+        
+        self.textScroll.setWidget(self.mesText)
         
         self.gridBox.addWidget(self.ageLabel, 0, 2, 1, 1)
         self.gridBox.addWidget(self.ageText, 1, 2, 1, 1)

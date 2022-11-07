@@ -19,138 +19,7 @@ def log_uncaught_exceptions(ex_cls, ex, tb):
     text += ''.join(traceback.format_tb(tb))
     print(text)
     #QtWidgets.QMessageBox.critical(None, 'Error', text)
-    # quit()
-
-class ui_thread(QThread):
-
-    def __init__(self, pogranWorker):
-        super().__init__()
-        self.pogran = pogranWorker
-    
-    ###################
-    #Разобраться, нахера это нужно
-    ###################   
-    def __del__(self):
-        self.wait()
-    
-    ###################
-    #Тело потока
-    ###################      
-    def run(self):
-        self.running = True #Флаг работы потока
-        while self.running:
-            try:
-                for mes in self.pogran.chat_mes:
-                    if mes['id'] not in self.pogran.cont_id:
-                        mesTextforUI = ''
-                        for mes_content in mes['text']:
-                            if  isinstance (mes_content, dict):
-                                mesTextforUI += mes_content['text']
-                            else:
-                                mesTextforUI += mes_content
-                        self.pogran.sg.mesTxtSignal.emit(mesTextforUI)
-                            #self.uiWorker.setMes(mesTextforUI)
-                        print(mesTextforUI)
-                        input()
-                            #     if mes_content['type'] == 'text_link' or mes_content['type'] == 'hashtag':
-                            #         if mes_content['text'] == '#развернули':
-                            #             print(mes['text'])
-                            #             print(mes_content)
-                            #             print(mes['text'][mes['text'].index(mes_content)+1])
-                            #             age_in = input('Возраст: ')
-                            #             if age_in == 'cont':
-                            #                 continue
-                            #             else:
-                            #                 age.append(age_in)
-                            #             cause.append(input('Причина: '))
-                            #             vus.append(input('ВУС: '))
-                            #             country.append(input('Страна въезда: '))
-                            #             kpp.append(input('КПП выезда: '))
-                            #             print(mes['date'])
-                            #             date_in=input('Дата: ')
-                            #             if date_in =='':
-                            #                 date.append(mes['date'])
-                            #             else:
-                            #                 date.append(date_in)
-                            #             id.append(mes['id'])
-                            #
-                            #     #print(i)
-                            # elif isinstance (mes_content, str):
-                            #     if '❌' in mes_content:
-                            #         print(mes['text'])
-                            #         print(mes_content)
-                            #         age_in = input('Возраст: ')
-                            #         if age_in == 'cont':
-                            #             continue
-                            #         else:
-                            #             age.append(age_in)
-                            #         cause.append(input('Причина: '))
-                            #         vus.append(input('ВУС: '))
-                            #         country.append(input('Страна въезда: '))
-                            #         kpp.append(input('КПП выезда: '))
-                            #         print(mes['date'])
-                            #         date_in=input('Дата: ')
-                            #         if date_in =='':
-                            #             date.append(mes['date'])
-                            #         else:
-                            #             date.append(date_in)
-                            #         id.append(mes['id'])                
-                            # else:
-                            #     if '❌' in mes_content:
-                            #         print(mes['text'])
-                            #         print(mes_content)
-                            #         age_in = input('Возраст: ')
-                            #         if age_in == 'cont':
-                            #             continue
-                            #         else:
-                            #             age.append(age_in)
-                            #         cause.append(input('Причина: '))
-                            #         vus.append(input('ВУС: '))
-                            #         country.append(input('Страна въезда: '))
-                            #         kpp.append(input('КПП выезда: '))
-                            #         print(mes['date'])
-                            #         date_in=input('Дата: ')
-                            #         if date_in =='':
-                            #             date.append(mes['date'])
-                            #         else:
-                            #             date.append(date_in)
-                            #         id.append(mes['id'])                     
-            except EOFError:
-                #print(mes['id'])
-                df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
-                     'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-                      'voenk':self.voenk, 'date':self.date}
-                negative_case_data=pd.DataFrame(df)
-                with open('case_list.csv', 'w', encoding="utf-8") as f:
-                    #csv=s.sort_values('cnt')
-                    f.write(negative_case_data.to_csv(index=True))
-                    f.close()
-                
-                df={'id': self.cont_id, 'tag':self.cont_tag}
-                cont_data=pd.DataFrame(df)
-                with open('continue_list.csv', 'w', encoding="utf-8") as f:
-                    #csv=s.sort_values('cnt')
-                    f.write(cont_data.to_csv(index=True))
-                    f.close()
-                                 
-            except Exception as e:
-                print(e)
-                df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
-                     'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-                      'voenk':self.voenk, 'date':self.date}
-                negative_case_data=pd.DataFrame(df)
-                with open('case_list.csv', 'w', encoding="utf-8") as f:
-                    #csv=s.sort_values('cnt')
-                    f.write(negative_case_data.to_csv(index=True))
-                    f.close()
-            
-            df={'id': self.cont_id, 'tag':self.cont_tag}
-            cont_data=pd.DataFrame(df)
-            with open('continue_list.csv', 'w', encoding="utf-8") as f:
-                #csv=s.sort_values('cnt')
-                f.write(cont_data.to_csv(index=True))
-                f.close() 
-            
+    # quit()            
         
 sys.excepthook = log_uncaught_exceptions 
 
@@ -172,7 +41,8 @@ class PogranControl():
         self.date = date
         self.id = id_ls
         
-        self.thr = ui_thread(self);
+        self.mes_count=0
+        
     def initChatLists(self, mes, cont_id=[], cont_tag=[]):
         self.chat_mes = mes
         self.cont_id = cont_id
@@ -184,12 +54,126 @@ class PogranControl():
         self.sg = Signals()
         self.uiWorker = ui(self)
         self.uiWorker.sg.endInitSignal.connect(self.startWorker)  
-        #self.uiWorker.sg.endInitSignal.emit()
+        self.uiWorker.sg.endInitSignal.emit()
+        #self.uiWorker.contBut.clicked.connect(self.startWorker)
         
-    @Slot()
     def startWorker(self):
-        self.thr.run()
-        
+        try:
+            flag=1
+            while flag:
+                if self.chat_mes[self.mes_count]['id'] not in self.cont_id:
+                    mesTextforUI = ''
+                    for mes_content in self.chat_mes[self.mes_count]['text']:
+                        if  isinstance (mes_content, dict):
+                            mesTextforUI += mes_content['text']
+                        else:
+                            mesTextforUI += mes_content
+                    if '#развернули' in mesTextforUI or '❌' in mesTextforUI:
+                        self.sg.mesTxtSignal.emit(mesTextforUI)
+                        print(mesTextforUI)
+                        flag=0;
+                    else:
+                        self.mes_count+=1
+                else:
+                    self.mes_count+=1
+                        #     if mes_content['type'] == 'text_link' or mes_content['type'] == 'hashtag':
+                        #         if mes_content['text'] == '#развернули':
+                        #             print(mes['text'])
+                        #             print(mes_content)
+                        #             print(mes['text'][mes['text'].index(mes_content)+1])
+                        #             age_in = input('Возраст: ')
+                        #             if age_in == 'cont':
+                        #                 continue
+                        #             else:
+                        #                 age.append(age_in)
+                        #             cause.append(input('Причина: '))
+                        #             vus.append(input('ВУС: '))
+                        #             country.append(input('Страна въезда: '))
+                        #             kpp.append(input('КПП выезда: '))
+                        #             print(mes['date'])
+                        #             date_in=input('Дата: ')
+                        #             if date_in =='':
+                        #                 date.append(mes['date'])
+                        #             else:
+                        #                 date.append(date_in)
+                        #             id.append(mes['id'])
+                        #
+                        #     #print(i)
+                        # elif isinstance (mes_content, str):
+                        #     if '❌' in mes_content:
+                        #         print(mes['text'])
+                        #         print(mes_content)
+                        #         age_in = input('Возраст: ')
+                        #         if age_in == 'cont':
+                        #             continue
+                        #         else:
+                        #             age.append(age_in)
+                        #         cause.append(input('Причина: '))
+                        #         vus.append(input('ВУС: '))
+                        #         country.append(input('Страна въезда: '))
+                        #         kpp.append(input('КПП выезда: '))
+                        #         print(mes['date'])
+                        #         date_in=input('Дата: ')
+                        #         if date_in =='':
+                        #             date.append(mes['date'])
+                        #         else:
+                        #             date.append(date_in)
+                        #         id.append(mes['id'])                
+                        # else:
+                        #     if '❌' in mes_content:
+                        #         print(mes['text'])
+                        #         print(mes_content)
+                        #         age_in = input('Возраст: ')
+                        #         if age_in == 'cont':
+                        #             continue
+                        #         else:
+                        #             age.append(age_in)
+                        #         cause.append(input('Причина: '))
+                        #         vus.append(input('ВУС: '))
+                        #         country.append(input('Страна въезда: '))
+                        #         kpp.append(input('КПП выезда: '))
+                        #         print(mes['date'])
+                        #         date_in=input('Дата: ')
+                        #         if date_in =='':
+                        #             date.append(mes['date'])
+                        #         else:
+                        #             date.append(date_in)
+                        #         id.append(mes['id'])                     
+        except EOFError:
+            #print(mes['id'])
+            df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
+                 'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
+                  'voenk':self.voenk, 'date':self.date}
+            negative_case_data=pd.DataFrame(df)
+            with open('case_list.csv', 'w', encoding="utf-8") as f:
+                #csv=s.sort_values('cnt')
+                f.write(negative_case_data.to_csv(index=True))
+                f.close()
+            
+            df={'id': self.cont_id, 'tag':self.cont_tag}
+            cont_data=pd.DataFrame(df)
+            with open('continue_list.csv', 'w', encoding="utf-8") as f:
+                #csv=s.sort_values('cnt')
+                f.write(cont_data.to_csv(index=True))
+                f.close()
+                             
+        except Exception as e:
+            print(e)
+            df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
+                 'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
+                  'voenk':self.voenk, 'date':self.date}
+            negative_case_data=pd.DataFrame(df)
+            with open('case_list.csv', 'w', encoding="utf-8") as f:
+                #csv=s.sort_values('cnt')
+                f.write(negative_case_data.to_csv(index=True))
+                f.close()
+            
+            df={'id': self.cont_id, 'tag':self.cont_tag}
+            cont_data=pd.DataFrame(df)
+            with open('continue_list.csv', 'w', encoding="utf-8") as f:
+                #csv=s.sort_values('cnt')
+                f.write(cont_data.to_csv(index=True))
+                f.close() 
 #
 # df={'id':id, 'age':age, 'cause':cause, 'vus':vus, 'country':country, 'kpp':kpp, 'date':date}
 # negative_case_data=pd.DataFrame(df)
