@@ -34,6 +34,8 @@ class ui(QWidget):
         self.gridBox=QGridLayout(self)
         self.gridBox.setContentsMargins(5, 5, 5, 5)
         
+        self.mesCntLabel = QLabel(self)
+        self.mesCntLabel.setText("")
         self.mesText=QLabel(self)
         self.mesText.setFont("Sans Serif")
         self.mesText.setWordWrap(True)
@@ -75,6 +77,10 @@ class ui(QWidget):
         self.kategLabel.setText('Категория годности')
         self.kategText=QLineEdit(self)
         
+        self.katZLabel=QLabel(self)
+        self.katZLabel.setText('Категория запаса')
+        self.katZText=QLineEdit(self)
+        
         self.dateLabel=QLabel(self)
         self.dateLabel.setText('Дата')
         self.dateText=QLineEdit(self)
@@ -94,8 +100,9 @@ class ui(QWidget):
         self.exitBut=QPushButton(self)
         self.exitBut.setText("Выход")
         
-        self.gridBox.addWidget(self.dateMesLabel, 0, 1, 3, 1)
-        self.gridBox.addWidget(self.textScroll, 3, 1, 20, 1)
+        self.gridBox.addWidget(self.dateMesLabel, 0, 1, 2, 1)
+        self.gridBox.addWidget(self.mesCntLabel, 2, 1, 2, 1)
+        self.gridBox.addWidget(self.textScroll, 4, 1, 22, 1)
         
         self.textScroll.setWidget(self.mesText)
         
@@ -123,14 +130,17 @@ class ui(QWidget):
         self.gridBox.addWidget(self.kategLabel, 14, 2, 1, 1)
         self.gridBox.addWidget(self.kategText, 15, 2, 1, 1)
         
-        self.gridBox.addWidget(self.dateLabel, 16, 2, 1, 1)
-        self.gridBox.addWidget(self.dateText, 17, 2, 1, 1)
+        self.gridBox.addWidget(self.katZLabel, 16, 2, 1, 1)
+        self.gridBox.addWidget(self.katZText, 17, 2, 1, 1)
         
-        self.gridBox.addWidget(self.writeBut, 18, 2, 1, 1)
-        self.gridBox.addWidget(self.addBut, 19, 2, 1, 1)
-        self.gridBox.addWidget(self.contBut, 20, 2, 1, 1)
-        self.gridBox.addWidget(self.vbrosBut, 21, 2, 1, 1)
-        self.gridBox.addWidget(self.exitBut, 22, 2, 1, 1)
+        self.gridBox.addWidget(self.dateLabel, 18, 2, 1, 1)
+        self.gridBox.addWidget(self.dateText, 19, 2, 1, 1)
+        
+        self.gridBox.addWidget(self.writeBut, 20, 2, 1, 1)
+        self.gridBox.addWidget(self.addBut, 21, 2, 1, 1)
+        self.gridBox.addWidget(self.contBut, 22, 2, 1, 1)
+        self.gridBox.addWidget(self.vbrosBut, 23, 2, 1, 1)
+        self.gridBox.addWidget(self.exitBut, 24, 2, 1, 1)
         
         self.setLayout(self.gridBox)
         
@@ -141,9 +151,10 @@ class ui(QWidget):
     def setMes(self, mes):
         self.mesText.setText(mes)
     
-    @Slot(str)
-    def setDate(self, date):
+    @Slot(str, str)
+    def setDate(self, date, msgCnt):
         self.dateMesLabel.setText(date)
+        self.mesCntLabel.setText(msgCnt)
         self.dateText.setText(date)
         
     def getInfo(self):

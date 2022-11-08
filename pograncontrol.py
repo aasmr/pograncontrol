@@ -25,7 +25,7 @@ sys.excepthook = log_uncaught_exceptions
 
 class Signals(QObject):
     mesTxtSignal = Signal(str)
-    mesDateSignal = Signal(str)
+    mesDateSignal = Signal(str, str)
     def __init__(self):
         super().__init__()
 
@@ -80,7 +80,8 @@ class PogranControl():
                             mesTextforUI += mes_content
                     if '#развернули' in mesTextforUI or '❌' in mesTextforUI:
                         self.sg.mesTxtSignal.emit(mesTextforUI)
-                        self.sg.mesDateSignal.emit(self.chat_mes[self.mes_count]['date'])
+                        msgCnt=str(self.mes_count) + '/' + str(len(self.chat_mes))
+                        self.sg.mesDateSignal.emit(self.chat_mes[self.mes_count]['date'], msgCnt)
                         #print(mesTextforUI)
                         flag=0;
                     else:
