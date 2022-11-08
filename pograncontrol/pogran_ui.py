@@ -5,8 +5,8 @@ from PySide2.QtCore import *
 
 class Signals(QObject):
     endInitSignal = Signal()
-    writeSignal = Signal(str, str, str, str, str, str, str, str, str)
-    addSignal = Signal(str, str, str, str, str, str, str, str, str)
+    writeSignal = Signal(str, str, str, str, str, str, str, str, str, str)
+    addSignal = Signal(str, str, str, str, str, str, str, str, str, str)
     def __init__(self):
         super().__init__()
 
@@ -166,6 +166,7 @@ class ui(QWidget):
         yService = self.yServiceText.text()
         voenk = self.voenkText.text()
         kategory = self.kategText.text()
+        katZ = self.katZText.text()
         date = self.dateText.text()
         
         self.ageText.setText("")
@@ -176,12 +177,13 @@ class ui(QWidget):
         self.yServiceText.setText("")
         self.voenkText.setText("")
         self.kategText.setText("")
+        self.katZText.setText("")
         self.dateText.setText("")
         
         if date == "":
             date = self.dateMesLabel.text()
         
-        self.sg.writeSignal.emit(age, cause, vus, country, kpp, yService, voenk, kategory, date)
+        self.sg.writeSignal.emit(age, cause, vus, country, kpp, yService, voenk, kategory, katZ, date)
         
     def getInfo_add(self):
         age = self.ageText.text()
@@ -192,6 +194,7 @@ class ui(QWidget):
         yService = self.yServiceText.text()
         voenk = self.voenkText.text()
         kategory = self.kategText.text()
+        katZ = self.katZText.text()
         date = self.dateText.text()
         
         self.ageText.setText("")
@@ -202,12 +205,13 @@ class ui(QWidget):
         self.yServiceText.setText("")
         self.voenkText.setText("")
         self.kategText.setText("")
-        self.dateText.setText("")
+        self.katZText.setText("")
+        #self.dateText.setText("")
         
         if date == "":
             date = self.dateMesLabel.text()
         
-        self.sg.addSignal.emit(age, cause, vus, country, kpp, yService, voenk, kategory, date)    
+        self.sg.addSignal.emit(age, cause, vus, country, kpp, yService, voenk, kategory, katZ, date)    
         #return age, cause, vus, country, kpp, yService, voenk, kategory, date
         
 if __name__ == "__main__":
