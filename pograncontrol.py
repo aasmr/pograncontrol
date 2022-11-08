@@ -30,7 +30,7 @@ class Signals(QObject):
         super().__init__()
 
 class PogranControl():
-    def __init__(self, age = [], cause = [], vus = [], country = [], kpp = [], yService = [], voenk = [], kategory = [], katZ = [], date = [], id_ls = []):
+    def __init__(self, age = [], cause = [], vus = [], country = [], kpp = [], yService = [], voenk = [], kategory = [], katZ = [], date = [], date_wo_time = [], id_ls = []):
         self.age = age
         self.cause = cause
         self.vus = vus
@@ -41,6 +41,7 @@ class PogranControl():
         self.kategory = kategory
         self.katZ = katZ
         self.date = date
+        self.date_wo_time=date_wo_time
         self.id = id_ls
         
         self.mes_count=0
@@ -96,7 +97,7 @@ class PogranControl():
             #print(mes['id'])
             df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
              'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-              'voenk':self.voenk, 'kategory':self.kategory, 'katZ':self.katZ, 'date':self.date}
+              'voenk':self.voenk, 'kategory':self.kategory, 'katZ':self.katZ, 'date':self.date, 'date_wo_time':self.date_wo_time}
             negative_case_data=pd.DataFrame(df)
             with open('case_list.csv', 'w', encoding="utf-8") as f:
                 #csv=s.sort_values('cnt')
@@ -114,7 +115,7 @@ class PogranControl():
             print(e)
             df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
              'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-              'voenk':self.voenk, 'kategory':self.kategory, 'katZ':self.katZ, 'date':self.date}
+              'voenk':self.voenk, 'kategory':self.kategory, 'katZ':self.katZ, 'date':self.date, 'date_wo_time':self.date_wo_time}
             negative_case_data=pd.DataFrame(df)
             with open('case_list.csv', 'w', encoding="utf-8") as f:
                 #csv=s.sort_values('cnt')
@@ -140,6 +141,7 @@ class PogranControl():
         self.kategory.append(kategory)
         self.katZ.append(katZ)
         self.date.append(date)
+        self.date_wo_time.append(date[:10])
         self.id.append(self.chat_mes[self.mes_count]['id'])
         
         self.cont_id.append(self.chat_mes[self.mes_count]['id'])
@@ -160,6 +162,7 @@ class PogranControl():
         self.kategory.append(kategory)
         self.katZ.append(katZ)
         self.date.append(date)
+        self.date_wo_time.append(date[:10])
         self.id.append(self.chat_mes[self.mes_count]['id'])
         
         self.cont_id.append(self.chat_mes[self.mes_count]['id'])
@@ -185,7 +188,7 @@ class PogranControl():
     def exit(self): 
         df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
              'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-              'voenk':self.voenk, 'kategory':self.kategory, 'katZ':self.katZ, 'date':self.date}
+              'voenk':self.voenk, 'kategory':self.kategory, 'katZ':self.katZ, 'date':self.date,  'date_wo_time':self.date_wo_time}
         negative_case_data=pd.DataFrame(df)
         with open('case_list.csv', 'w', encoding="utf-8") as f:
             #csv=s.sort_values('cnt')
@@ -226,8 +229,9 @@ def openFiles():
             kategory=case_data_prev['kategory'].tolist()
             katZ=case_data_prev['katZ'].tolist()
             date = case_data_prev['date'].tolist()
+            date_wo_time = case_data_prev['date_wo_time'].tolist()
             id = case_data_prev['id'].tolist()
-            pogranworker=PogranControl(age, cause, vus, country, kpp, yService, voenk, kategory, katZ, date, id)
+            pogranworker=PogranControl(age, cause, vus, country, kpp, yService, voenk, kategory, katZ, date, date_wo_time, id)
     else: 
         pogranworker=PogranControl()
     
