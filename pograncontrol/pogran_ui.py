@@ -5,6 +5,8 @@ from PySide2.QtCore import *
 
 class Signals(QObject):
     endInitSignal = Signal()
+    writeSignal = Signal(str, str, str, str, str, str, str, str, str)
+    addSignal = Signal(str, str, str, str, str, str, str, str, str)
     def __init__(self):
         super().__init__()
 
@@ -24,19 +26,21 @@ class ui(QWidget):
         self.setMaximumSize(self._width,self._height)
         self.setWindowTitle("Pograncotrol")
         self.textScroll=QScrollArea(self)
+        self.textScroll.setFixedWidth(500)
         self.textScroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.textScroll.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.textScroll.setWidgetResizable(True)
-        self.textScroll.setContentsMargins(10, 10, 10 , 10)
+        self.textScroll.setContentsMargins(50, 50, 50 , 50)
         self.gridBox=QGridLayout(self)
         self.gridBox.setContentsMargins(5, 5, 5, 5)
         
         self.mesText=QLabel(self)
         self.mesText.setFont("Sans Serif")
         self.mesText.setWordWrap(True)
+        #self.mesText.setTextFormat()
         self.dateMesLabel=QLabel(self)
         self.mesText.setText("")
-        self.mesText.setFixedWidth(500)
+        #self.mesText.setFixedWidth(500)
         self.dateMesLabel.setText("")
         
         self.ageLabel=QLabel(self)
@@ -67,12 +71,19 @@ class ui(QWidget):
         self.voenkLabel.setText('Военкомат')
         self.voenkText=QLineEdit(self)
         
+        self.kategLabel=QLabel(self)
+        self.kategLabel.setText('Категория годности')
+        self.kategText=QLineEdit(self)
+        
         self.dateLabel=QLabel(self)
         self.dateLabel.setText('Дата')
         self.dateText=QLineEdit(self)
         
-        self.nextBut=QPushButton(self)
-        self.nextBut.setText("Следующая")
+        self.writeBut=QPushButton(self)
+        self.writeBut.setText("Записать")
+        
+        self.addBut=QPushButton(self)
+        self.addBut.setText("Добавить еще одну запись")
         
         self.contBut=QPushButton(self)
         self.contBut.setText("Пропустить")
@@ -84,7 +95,7 @@ class ui(QWidget):
         self.exitBut.setText("Выход")
         
         self.gridBox.addWidget(self.dateMesLabel, 0, 1, 3, 1)
-        self.gridBox.addWidget(self.textScroll, 3, 1, 17, 1)
+        self.gridBox.addWidget(self.textScroll, 3, 1, 20, 1)
         
         self.textScroll.setWidget(self.mesText)
         
@@ -109,17 +120,22 @@ class ui(QWidget):
         self.gridBox.addWidget(self.voenkLabel, 12, 2, 1, 1)
         self.gridBox.addWidget(self.voenkText, 13, 2, 1, 1)
         
-        self.gridBox.addWidget(self.dateLabel, 14, 2, 1, 1)
-        self.gridBox.addWidget(self.dateText, 15, 2, 1, 1)
+        self.gridBox.addWidget(self.kategLabel, 14, 2, 1, 1)
+        self.gridBox.addWidget(self.kategText, 15, 2, 1, 1)
         
-        self.gridBox.addWidget(self.nextBut, 16, 2, 1, 1)
-        self.gridBox.addWidget(self.contBut, 17, 2, 1, 1)
-        self.gridBox.addWidget(self.vbrosBut, 18, 2, 1, 1)
-        self.gridBox.addWidget(self.exitBut, 19, 2, 1, 1)
+        self.gridBox.addWidget(self.dateLabel, 16, 2, 1, 1)
+        self.gridBox.addWidget(self.dateText, 17, 2, 1, 1)
+        
+        self.gridBox.addWidget(self.writeBut, 18, 2, 1, 1)
+        self.gridBox.addWidget(self.addBut, 19, 2, 1, 1)
+        self.gridBox.addWidget(self.contBut, 20, 2, 1, 1)
+        self.gridBox.addWidget(self.vbrosBut, 21, 2, 1, 1)
+        self.gridBox.addWidget(self.exitBut, 22, 2, 1, 1)
         
         self.setLayout(self.gridBox)
         
-        
+        self.writeBut.clicked.connect(self.getInfo)
+        self.addBut.clicked.connect(self.getInfo_add)
     
     @Slot(str)
     def setMes(self, mes):
@@ -128,6 +144,7 @@ class ui(QWidget):
     @Slot(str)
     def setDate(self, date):
         self.dateMesLabel.setText(date)
+        self.dateText.setText(date)
         
     def getInfo(self):
         age = self.ageText.text()
@@ -137,12 +154,50 @@ class ui(QWidget):
         kpp = self.kppText.text()
         yService = self.yServiceText.text()
         voenk = self.voenkText.text()
+        kategory = self.kategText.text()
         date = self.dateText.text()
+        
+        self.ageText.setText("")
+        self.causeText.setText("")
+        self.vusText.setText("")
+        self.countryText.setText("")
+        self.kppText.setText("")
+        self.yServiceText.setText("")
+        self.voenkText.setText("")
+        self.kategText.setText("")
+        self.dateText.setText("")
         
         if date == "":
             date = self.dateMesLabel.text()
-            
-        return age, cause, vus, country, kpp, yService, voenk, date
+        
+        self.sg.writeSignal.emit(age, cause, vus, country, kpp, yService, voenk, kategory, date)
+        
+    def getInfo_add(self):
+        age = self.ageText.text()
+        cause = self.causeText.text()
+        vus = self.vusText.text()
+        country = self.countryText.text()
+        kpp = self.kppText.text()
+        yService = self.yServiceText.text()
+        voenk = self.voenkText.text()
+        kategory = self.kategText.text()
+        date = self.dateText.text()
+        
+        self.ageText.setText("")
+        self.causeText.setText("")
+        self.vusText.setText("")
+        self.countryText.setText("")
+        self.kppText.setText("")
+        self.yServiceText.setText("")
+        self.voenkText.setText("")
+        self.kategText.setText("")
+        self.dateText.setText("")
+        
+        if date == "":
+            date = self.dateMesLabel.text()
+        
+        self.sg.addSignal.emit(age, cause, vus, country, kpp, yService, voenk, kategory, date)    
+        #return age, cause, vus, country, kpp, yService, voenk, kategory, date
         
 if __name__ == "__main__":
     app = QApplication([])

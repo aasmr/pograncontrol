@@ -30,7 +30,7 @@ class Signals(QObject):
         super().__init__()
 
 class PogranControl():
-    def __init__(self, age = [], cause = [], vus = [], country = [], kpp = [], yService = [], voenk = [], date = [], id_ls = []):
+    def __init__(self, age = [], cause = [], vus = [], country = [], kpp = [], yService = [], voenk = [], kategory = [], date = [], id_ls = []):
         self.age = age
         self.cause = cause
         self.vus = vus
@@ -38,6 +38,7 @@ class PogranControl():
         self.kpp = kpp
         self.yService = yService
         self.voenk = voenk
+        self.kategory = kategory
         self.date = date
         self.id = id_ls
         
@@ -53,7 +54,13 @@ class PogranControl():
         
         self.sg = Signals()
         self.uiWorker = ui(self)
-        self.uiWorker.sg.endInitSignal.connect(self.startWorker)  
+        self.uiWorker.sg.endInitSignal.connect(self.startWorker)
+        self.uiWorker.sg.writeSignal.connect(self.writecase)
+        self.uiWorker.sg.addSignal.connect(self.addCase)
+        self.uiWorker.exitBut.clicked.connect(self.exit) 
+        self.uiWorker.contBut.clicked.connect(self.contWrite)
+        self.uiWorker.vbrosBut.clicked.connect(self.writeVbros)
+        
         self.uiWorker.sg.endInitSignal.emit()
         #self.uiWorker.contBut.clicked.connect(self.startWorker)
         
@@ -65,85 +72,29 @@ class PogranControl():
                     mesTextforUI = ''
                     for mes_content in self.chat_mes[self.mes_count]['text']:
                         if  isinstance (mes_content, dict):
+                            # if '#развернули' in mes_content['text'] or '❌' in mes_content['text']:
+                            #     mesTextforUI = mesTextforUI + '**' + mes_content['text'] + '**'
+                            # else:
                             mesTextforUI += mes_content['text']
                         else:
                             mesTextforUI += mes_content
                     if '#развернули' in mesTextforUI or '❌' in mesTextforUI:
                         self.sg.mesTxtSignal.emit(mesTextforUI)
-                        print(mesTextforUI)
+                        self.sg.mesDateSignal.emit(self.chat_mes[self.mes_count]['date'])
+                        #print(mesTextforUI)
                         flag=0;
                     else:
+                        self.cont_id.append(self.chat_mes[self.mes_count]['id'])
+                        self.cont_tag.append('cont')
                         self.mes_count+=1
                 else:
                     self.mes_count+=1
-                        #     if mes_content['type'] == 'text_link' or mes_content['type'] == 'hashtag':
-                        #         if mes_content['text'] == '#развернули':
-                        #             print(mes['text'])
-                        #             print(mes_content)
-                        #             print(mes['text'][mes['text'].index(mes_content)+1])
-                        #             age_in = input('Возраст: ')
-                        #             if age_in == 'cont':
-                        #                 continue
-                        #             else:
-                        #                 age.append(age_in)
-                        #             cause.append(input('Причина: '))
-                        #             vus.append(input('ВУС: '))
-                        #             country.append(input('Страна въезда: '))
-                        #             kpp.append(input('КПП выезда: '))
-                        #             print(mes['date'])
-                        #             date_in=input('Дата: ')
-                        #             if date_in =='':
-                        #                 date.append(mes['date'])
-                        #             else:
-                        #                 date.append(date_in)
-                        #             id.append(mes['id'])
-                        #
-                        #     #print(i)
-                        # elif isinstance (mes_content, str):
-                        #     if '❌' in mes_content:
-                        #         print(mes['text'])
-                        #         print(mes_content)
-                        #         age_in = input('Возраст: ')
-                        #         if age_in == 'cont':
-                        #             continue
-                        #         else:
-                        #             age.append(age_in)
-                        #         cause.append(input('Причина: '))
-                        #         vus.append(input('ВУС: '))
-                        #         country.append(input('Страна въезда: '))
-                        #         kpp.append(input('КПП выезда: '))
-                        #         print(mes['date'])
-                        #         date_in=input('Дата: ')
-                        #         if date_in =='':
-                        #             date.append(mes['date'])
-                        #         else:
-                        #             date.append(date_in)
-                        #         id.append(mes['id'])                
-                        # else:
-                        #     if '❌' in mes_content:
-                        #         print(mes['text'])
-                        #         print(mes_content)
-                        #         age_in = input('Возраст: ')
-                        #         if age_in == 'cont':
-                        #             continue
-                        #         else:
-                        #             age.append(age_in)
-                        #         cause.append(input('Причина: '))
-                        #         vus.append(input('ВУС: '))
-                        #         country.append(input('Страна въезда: '))
-                        #         kpp.append(input('КПП выезда: '))
-                        #         print(mes['date'])
-                        #         date_in=input('Дата: ')
-                        #         if date_in =='':
-                        #             date.append(mes['date'])
-                        #         else:
-                        #             date.append(date_in)
-                        #         id.append(mes['id'])                     
+                                    
         except EOFError:
             #print(mes['id'])
             df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
                  'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-                  'voenk':self.voenk, 'date':self.date}
+                  'voenk':self.voenk, 'kategory':self.kategory, 'date':self.date}
             negative_case_data=pd.DataFrame(df)
             with open('case_list.csv', 'w', encoding="utf-8") as f:
                 #csv=s.sort_values('cnt')
@@ -161,7 +112,7 @@ class PogranControl():
             print(e)
             df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
                  'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
-                  'voenk':self.voenk, 'date':self.date}
+                  'voenk':self.voenk, 'kategory':self.kategory, 'date':self.date}
             negative_case_data=pd.DataFrame(df)
             with open('case_list.csv', 'w', encoding="utf-8") as f:
                 #csv=s.sort_values('cnt')
@@ -173,8 +124,79 @@ class PogranControl():
             with open('continue_list.csv', 'w', encoding="utf-8") as f:
                 #csv=s.sort_values('cnt')
                 f.write(cont_data.to_csv(index=True))
-                f.close() 
-#
+                f.close()
+    
+    @Slot(str, str, str, str, str, str, str, str, str)
+    def writecase(self, age, cause, vus, country, kpp, yService, voenk, kategory, date):
+        self.age.append(age)
+        self.cause.append(cause)
+        self.vus.append(vus)
+        self.country.append(country)
+        self.kpp.append(kpp)
+        self.yService.append(yService)
+        self.voenk.append(voenk)
+        self.kategory.append(kategory)
+        self.date.append(date)
+        self.id.append(self.chat_mes[self.mes_count]['id'])
+        
+        self.cont_id.append(self.chat_mes[self.mes_count]['id'])
+        self.cont_tag.append('negative')
+        
+        self.mes_count+=1
+        self.startWorker()
+    
+    @Slot(str, str, str, str, str, str, str, str, str)
+    def addCase(self, age, cause, vus, country, kpp, yService, voenk, kategory, date):
+        self.age.append(age)
+        self.cause.append(cause)
+        self.vus.append(vus)
+        self.country.append(country)
+        self.kpp.append(kpp)
+        self.yService.append(yService)
+        self.voenk.append(voenk)
+        self.kategory.append(kategory)
+        self.date.append(date)
+        self.id.append(self.chat_mes[self.mes_count]['id'])
+        
+        self.cont_id.append(self.chat_mes[self.mes_count]['id'])
+        self.cont_tag.append('negative')
+        
+        #self.mes_count+=1
+        #self.startWorker()        
+    def writeVbros(self):
+        
+        self.cont_id.append(self.chat_mes[self.mes_count]['id'])
+        self.cont_tag.append('vbros')
+        
+        self.mes_count+=1
+        self.startWorker()
+    
+    def contWrite(self):
+        self.cont_id.append(self.chat_mes[self.mes_count]['id'])
+        self.cont_tag.append('cont')
+        
+        self.mes_count+=1
+        self.startWorker() 
+          
+    def exit(self): 
+        df={'id':self.id, 'age':self.age, 'cause':self.cause, 'vus':self.vus,
+             'country':self.country, 'kpp':self.kpp, 'yService':self.yService,
+              'voenk':self.voenk, 'kategory':self.kategory, 'date':self.date}
+        negative_case_data=pd.DataFrame(df)
+        with open('case_list.csv', 'w', encoding="utf-8") as f:
+            #csv=s.sort_values('cnt')
+            f.write(negative_case_data.to_csv(index=True))
+            f.close()
+        
+        df={'id': self.cont_id, 'tag':self.cont_tag}
+        cont_data=pd.DataFrame(df)
+        with open('continue_list.csv', 'w', encoding="utf-8") as f:
+            #csv=s.sort_values('cnt')
+            f.write(cont_data.to_csv(index=True))
+            f.close()
+        
+        self.uiWorker.close()
+
 # df={'id':id, 'age':age, 'cause':cause, 'vus':vus, 'country':country, 'kpp':kpp, 'date':date}
 # negative_case_data=pd.DataFrame(df)
 # with open('case_list.csv', 'w', encoding="utf-8") as f:
@@ -197,9 +219,10 @@ def openFiles():
             kpp = case_data_prev['kpp'].tolist()
             yService=case_data_prev['yService'].tolist()
             voenk=case_data_prev['voenk'].tolist()
+            kategory=case_data_prev['kategory'].tolist()
             date = case_data_prev['date'].tolist()
             id = case_data_prev['id'].tolist()
-            pogranworker=PogranControl(age, cause, vus, country, kpp, yService, voenk, date, id)
+            pogranworker=PogranControl(age, cause, vus, country, kpp, yService, voenk, kategory, date, id)
     else: 
         pogranworker=PogranControl()
     
