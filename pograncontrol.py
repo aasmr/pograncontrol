@@ -9,7 +9,7 @@ import os.path
 import pandas as pd
 import csv
 import sys
-
+import numpy as np
 from pograncontrol.pogran_ui import *
 
 # для отлавливания ошибок
@@ -26,6 +26,7 @@ sys.excepthook = log_uncaught_exceptions
 class Signals(QObject):
     mesTxtSignal = Signal(str)
     mesDateSignal = Signal(str, str)
+    mesSetCompleter = Signal(list, list, list, list, list, list)
     def __init__(self):
         super().__init__()
 
@@ -67,6 +68,14 @@ class PogranControl():
         #self.uiWorker.contBut.clicked.connect(self.startWorker)
         
     def startWorker(self):
+        self.cause_unq = np.unique(self.cause).tolist()
+        self.vus_unq = np.unique(self.vus).tolist()
+        self.country_unq = np.unique(self.country).tolist()
+        self.kpp_unq = np.unique(self.kpp).tolist()
+        self.yService_unq = np.unique(self.yService).tolist()
+        self.voenk_unq = np.unique(self.voenk).tolist()
+        
+        self.sg.mesSetCompleter.emit(self.cause_unq, self.vus_unq, self.country_unq, self.kpp_unq, self.yService_unq, self.voenk_unq)
         try:
             flag=1
             while flag:
