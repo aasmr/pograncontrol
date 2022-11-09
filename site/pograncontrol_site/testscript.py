@@ -8,6 +8,6 @@ with open('case_list.csv', 'r', encoding="utf-8") as f:
     case_data_prev=pd.read_csv('case_list.csv', sep=',', skiprows=1, names=headers_data)
 #print(np.unique(case_data_prev['date_wo_time'], return_counts=True))
 
-pd=case_data_prev['cause'].fillna('none')
-print(np.unique(pd, return_counts=True))
-#print(pd)
+pd=case_data_prev[case_data_prev['cause'] == 'отказ от военкомата']
+#print(np.unique(pd, return_counts=True))
+print(pd)
