@@ -29,9 +29,15 @@ def otkaz_chart(request):
     #q=Pograncontrol.objects.unique('date'))
     #print(Pograncontrol.objects.unique('date'))
     pd=case_data_prev[case_data_prev['cause'] == 'отказ от военкомата']
+    otkaz_voenk_label, otkaz_voenk_data = np.unique(pd['date_wo_time'], return_counts=True)
+    
+    pd=case_data_prev[case_data_prev['cause'] == 'отказ во въезде']
+    otkaz_country_label, otkaz_country_data = np.unique(pd['date_wo_time'], return_counts=True)
+    
+    pd=case_data_prev[case_data_prev['cause'] == 'отказ от въезде']
+    otkaz_country_exit_label, otkaz_country_exit_data = np.unique(pd['date_wo_time'], return_counts=True)
     
     labels, data = np.unique(case_data_prev['date_wo_time'], return_counts=True)
-    otkaz_voenk_label, otkaz_voenk_data = np.unique(pd['date_wo_time'], return_counts=True)
     for i in labels:
         labels_.append(str(i))
     for i in data:
