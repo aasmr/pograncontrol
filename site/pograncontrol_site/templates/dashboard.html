@@ -24,26 +24,29 @@
             data: {
               labels: data.labels,
               datasets: [{
-                label: 'Количество',
-                backgroundColor: 'blue',
-                data: data.data
-              },
-			  {
                 label: 'Отказы от военкоматов',
                 backgroundColor: 'red',
                 data: data.voenk
+
+              },
+			  {
+                label: 'Количество',
+                backgroundColor: 'blue',
+                data: data.data
 				}
 			  ]          
             },
             options: {
-			  scales: {
-				x: {
-					stacked: true
+				scales: {
+					xAxes: [{
+						stacked: true
+						}],
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+							}
+						}]
 					},
-				y: {
-					stacked: true
-					}
-				},
               responsive: true,
               legend: {
                 position: 'top',
