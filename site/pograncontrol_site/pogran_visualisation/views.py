@@ -6,6 +6,7 @@ from .models import Pograncontrol
 import pandas as pd
 import csv
 import numpy as np
+from django.template.context_processors import request
 
 with open('case_list.csv', 'r', encoding="utf-8") as f:
     reader = csv.reader(f, delimiter=',')
@@ -16,7 +17,7 @@ with open('case_list.csv', 'r', encoding="utf-8") as f:
 def home(request):
     return render(request, 'dashboard.html')
     
-def population_chart(request):
+def otkaz_chart(request):
     # get the data from the default method       
     #context = super().get_context_data(**kwargs)
     labels_=[]
@@ -48,4 +49,31 @@ def population_chart(request):
         'voenk': otkaz_voenk_data_
         })
 
-        
+def sluzhba_chart(request):
+    labels_=[]
+    data_=[]
+    pd=case_data_prev[case_data_prev['cause'] == 'отказ от военкомата']
+
+    service=pd['vus'].fillna('').tolist()
+
+    for i in range(len(service)):
+        if 'военная кафедра' in service[i]:
+            service[i] = 'военная кафедра'
+        if 'не служил' in service[i]:
+            service[i] = 'не служил'
+        if service[i] == '':
+            service[i] = 'не указано' 
+        if service[i] != 'служил' and service[i] != 'не служил' and service[i] != 'не указано' and service[i] != 'военная кафедра':
+            #print(service[i])
+            service[i] = 'служил' 
+
+    labels, data = np.unique(service, return_counts=True)
+    
+    for i in labels:
+        labels_.append(str(i))
+    for i in data:
+        data_.append(str(i))
+    return JsonResponse(data={
+        'labels': labels_,
+        'data': data_,
+        })

@@ -2,8 +2,8 @@
 
 {% block content %}
 
-  <div id="container" style="width: 75%;">
-    <canvas id="dashboard" data-url="{% url 'dashboard' %}"></canvas>
+  <div id="container1" style="width: 75%;">
+    <canvas id="otkaz" data-url="{% url 'otkaz' %}"></canvas>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -12,19 +12,19 @@
 
     $(function () {
 
-      var $populationChart = $("#dashboard");
+      var $otkazChart = $("#otkaz");
       $.ajax({
-        url: $populationChart.data("url"),
+        url: $otkazChart.data("url"),
         success: function (data) {
 
-          var ctx = $populationChart[0].getContext("2d");
+          var ctx = $otkazChart[0].getContext("2d");
 
           new Chart(ctx, {
             type: 'bar',
             data: {
               labels: data.labels,
               datasets: [{
-                label: 'Отказы от военкоматов',
+                label: 'Запреты от военкоматов',
                 backgroundColor: 'red',
                 data: data.voenk
 
@@ -53,7 +53,57 @@
               },
               title: {
                 display: true,
-                text: 'Количество отказов в пересении границы'
+                text: 'Количество отказов в пересечении границы'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+  
+  <div id="container2" style="width: 75%;">
+    <canvas id="sluzhba" data-url="{% url 'sluzhba' %}"></canvas>
+  </div>
+  <script>
+
+    $(function () {
+
+      var $sluzhbaChart = $("#sluzhba");
+      $.ajax({
+        url: $sluzhbaChart.data("url"),
+        success: function (data) {
+
+          var ctx = $sluzhbaChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                data: data.data,
+				backgroundColor: [
+					'rgb(255, 205, 86)',
+					'rgb(0, 255, 127)',
+					'rgb(54, 162, 235)',
+					'rgb(255, 99, 132)'
+						],
+              }
+			  ]          
+            },
+            options: {
+				scales: {
+					},
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Отношение к службе тех, кому отказано в пересечении границы'
               }
             }
           });
