@@ -89,7 +89,7 @@ class PogranControl():
                             mesTextforUI += mes_content['text']
                         else:
                             mesTextforUI += mes_content
-                    if '#развернули' in mesTextforUI or '❌' in mesTextforUI:
+                    if '#развернули' in mesTextforUI or '❌' in mesTextforUI or '#непустили' in mesTextforUI or '#невыпустили' in mesTextforUI:
                         self.sg.mesTxtSignal.emit(mesTextforUI)
                         msgCnt=str(self.mes_count) + '/' + str(len(self.chat_mes))
                         self.sg.mesDateSignal.emit(self.chat_mes[self.mes_count]['date'], msgCnt)
