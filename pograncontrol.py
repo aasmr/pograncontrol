@@ -142,7 +142,7 @@ class PogranControl():
     def writecase(self, age, cause, vus, country, kpp, yService, voenk, kategory, katZ, date):
         self.age.append(age)
         self.cause.append(cause)
-        self.vus.append(vus)
+        self.vus.append(vus)    
         self.country.append(country)
         self.kpp.append(kpp)
         self.yService.append(yService)
