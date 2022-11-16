@@ -25,14 +25,26 @@
               labels: data.labels,
               datasets: [{
                 label: 'Запреты от военкоматов',
-                backgroundColor: '#00ff9f',
+                backgroundColor: 'rgb(255, 99, 132)',
                 data: data.voenk
 
               },
 			  {
-                label: 'Количество',
+                label: 'Отказы во въезде',
+                backgroundColor: 'rgb(255, 205, 86)',
+                data: data.country
+
+              },
+			  {
+                label: 'Отказы в выезде иностранным государством',
                 backgroundColor: '#00b8ff',
-                data: data.data
+                data: data.exit
+
+              },
+			  {
+                label: 'Другое',
+                backgroundColor: '#00ff9f',
+                data: data.other
 				}
 			  ]          
             },
@@ -42,9 +54,7 @@
 						stacked: true
 						}],
 					yAxes: [{
-						ticks: {
-							beginAtZero: true
-							}
+						stacked: true
 						}]
 					},
               responsive: true,

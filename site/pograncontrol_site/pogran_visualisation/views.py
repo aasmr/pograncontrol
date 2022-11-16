@@ -23,8 +23,10 @@ def otkaz_chart(request):
     labels_=[]
     data_=[]
     
-    otkaz_voenk_label_ = []
+    other_data_ = []
     otkaz_voenk_data_ = []
+    otkaz_country_data_ = []
+    otkaz_country_exit_data_ = []
     #csv_to_db()
     #q=Pograncontrol.objects.unique('date'))
     #print(Pograncontrol.objects.unique('date'))
@@ -34,7 +36,7 @@ def otkaz_chart(request):
     pd=case_data_prev[case_data_prev['cause'] == 'отказ во въезде']
     otkaz_country_label, otkaz_country_data = np.unique(pd['date_wo_time'], return_counts=True)
     
-    pd=case_data_prev[case_data_prev['cause'] == 'отказ от въезде']
+    pd=case_data_prev[case_data_prev['cause'] == 'отказ в выезде иностранным государством']
     otkaz_country_exit_label, otkaz_country_exit_data = np.unique(pd['date_wo_time'], return_counts=True)
     
     labels, data = np.unique(case_data_prev['date_wo_time'], return_counts=True)
@@ -44,15 +46,30 @@ def otkaz_chart(request):
         data_.append(str(i))
     for i in otkaz_voenk_data:
         otkaz_voenk_data_.append(str(i))
-    i = 0    
-    while otkaz_voenk_label[0] > labels[i]:
-        otkaz_voenk_data_.insert(0, str(0))
-        i+=1
-    
+    for i in otkaz_country_data:
+        otkaz_country_data_.append(str(i))
+    for i in otkaz_country_exit_data:
+        otkaz_country_exit_data_.append(str(i))
+
+    i=0
+    while i < len(labels):
+        if not (labels[i] in otkaz_country_label):
+            otkaz_country_data_.insert(i, str(0))
+        if not (labels[i] in otkaz_country_exit_label):
+            otkaz_country_exit_data_.insert(i, str(0))
+        if not (labels[i] in otkaz_voenk_label):
+            otkaz_voenk_data_.insert(i, str(0))
+        
+        other_data_.insert(i,(int(data_[i])-int(otkaz_voenk_data_[i])-
+                              int(otkaz_country_exit_data_[i])-int(otkaz_country_data_[i])))
+        i+=1   
     return JsonResponse(data={
         'labels': labels_,
         'data': data_,
-        'voenk': otkaz_voenk_data_
+        'voenk': otkaz_voenk_data_,
+        'country': otkaz_country_data_,
+        'exit': otkaz_country_exit_data_,
+        'other': other_data_
         })
 
 def sluzhba_chart(request):
