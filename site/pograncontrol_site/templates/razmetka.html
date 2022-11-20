@@ -1,0 +1,82 @@
+<!doctype html>
+<title>Разметка случаев отказа</title>
+<style>
+#grid { 
+  display: grid;
+  grid-template-areas: 
+    "mes_text age"
+	"mes_text cause"
+	"mes_text vus"
+	"mes_text country"
+	"mes_text kpp"
+	"mes_text yService"
+	"mes_text voenk"
+	"mes_text kateg"
+	"mes_text katZ"
+    "mes_text date";
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+  height: 100vh;
+  margin: 0;
+}
+
+#grid > div {
+  font-size: 5vw;
+  padding: .5em;
+  background: gold;
+  text-align: center;
+}
+
+#page_mes_text {
+  grid-area: mes_text;
+}
+#page_age {
+  grid-area: age;
+}
+#page_cause { 
+  grid-area: cause;      
+  }
+#page_vus { 
+  grid-area: vus; 
+  }
+#page_country { 
+  grid-area: country; 
+  }
+#page_kpp {
+  grid-area: kpp;
+}
+#page_yService {
+  grid-area: yService;
+}
+#page_voenk { 
+  grid-area: voenk;      
+  }
+#page_kateg { 
+  grid-area: kateg; 
+  }
+#page_katZ { 
+  grid-area: katZ; 
+  }
+#page_date { 
+  grid-area: date; 
+  }
+</style>
+<head>
+	<h1><br>Разметка отказов</h1>
+</head>
+<body>
+	<div id="grid">
+	  <div id="page_mes_text">1</div>
+	  <div id="page_age">2</div>
+	  <div id="page_cause">3</div>
+	  <div id="page_vus">4</div>
+	  <div id="page_country">5</div>
+	  <div id="page_kpp">6</div>
+	  <div id="page_yService">7</div>
+	  <div id="page_voenk">8</div>
+	  <div id="page_kateg">9</div>
+	  <div id="page_katZ">10</div>
+	  <div id="page_date">11</div>
+	</div>
+</body>
