@@ -100,3 +100,85 @@ def sluzhba_chart(request):
         'labels': labels_,
         'data': data_,
         })
+
+def sex_chart(request):
+    labels_=[]
+    data_=[]
+    pd=case_data_prev
+
+    sex=pd['yService'].fillna('').tolist()
+
+    for i in range(len(sex)):
+        if 'женщина' in sex[i]:
+            sex[i] = 'женщина'
+        else:
+            sex[i] = 'мужчина'
+
+    labels, data = np.unique(sex, return_counts=True)
+    
+    for i in labels:
+        labels_.append(str(i))
+    for i in data:
+        data_.append(str(i))
+    return JsonResponse(data={
+        'labels': labels_,
+        'data': data_,
+        })
+
+def age_chart(request):
+    labels_=[]
+    data_=[]
+    pd=case_data_prev[case_data_prev['cause'] == 'отказ от военкомата']
+
+    age=pd['age'].fillna('').tolist()
+    age, age_cnt = np.unique(age, return_counts=True)
+    age = age[1:]
+    age_cnt = age_cnt[1:]
+    age = age.tolist()
+    age_cnt = age_cnt.tolist()
+    for i in range(len(age)):
+        age[i] = int(float(age[i]))
+
+    i=0
+
+    l_cnt = len(age)
+    while i < l_cnt-1:
+        if age[i+1] - age[i] > 1:
+            age.insert(i+1, age[i]+1)
+            age_cnt.insert(i+1, 0)
+        i=i+1
+        l_cnt = len(age)
+    
+    for i in age:
+        labels_.append(str(i))
+    for i in age_cnt:
+        data_.append(str(i))
+    return JsonResponse(data={
+        'labels': labels_,
+        'data': data_,
+        })
+    
+def kpp_chart(request):
+    labels_=[]
+    data_=[]
+    pd=case_data_prev[case_data_prev['cause'] == 'отказ от военкомата']
+
+    kpp_ls=pd['kpp'].fillna('').tolist()
+    
+    for i in range(len(kpp_ls)):
+        if kpp_ls[i] != 'Внуково' and kpp_ls[i] != 'Домодедово' and kpp_ls[i] != 'Шереметьево' and kpp_ls[i] != 'Пулково' and kpp_ls[i] != 'Верхний Ларс':
+            kpp_ls[i] = 'Другое'
+            
+    kpp, kpp_cnt = np.unique(kpp_ls, return_counts=True)
+    kpp = kpp.tolist()
+    kpp_cnt = kpp_cnt.tolist()
+    
+    for i in kpp:
+        labels_.append(str(i))
+    for i in kpp_cnt:
+        data_.append(str(i))
+    return JsonResponse(data={
+        'labels': labels_,
+        'data': data_,
+        })
+

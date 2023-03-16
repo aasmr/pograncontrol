@@ -1,82 +1,42 @@
 <!doctype html>
 <title>Разметка случаев отказа</title>
-<style>
-#grid { 
-  display: grid;
-  grid-template-areas: 
-    "mes_text age"
-	"mes_text cause"
-	"mes_text vus"
-	"mes_text country"
-	"mes_text kpp"
-	"mes_text yService"
-	"mes_text voenk"
-	"mes_text kateg"
-	"mes_text katZ"
-    "mes_text date";
-  grid-template-columns: 3fr 1fr;
-  grid-template-rows: auto;
-  grid-gap: 10px;
-  height: 100vh;
-  margin: 0;
-}
-
-#grid > div {
-  font-size: 5vw;
-  padding: .5em;
-  background: gold;
-  text-align: center;
-}
-
-#page_mes_text {
-  grid-area: mes_text;
-}
-#page_age {
-  grid-area: age;
-}
-#page_cause { 
-  grid-area: cause;      
-  }
-#page_vus { 
-  grid-area: vus; 
-  }
-#page_country { 
-  grid-area: country; 
-  }
-#page_kpp {
-  grid-area: kpp;
-}
-#page_yService {
-  grid-area: yService;
-}
-#page_voenk { 
-  grid-area: voenk;      
-  }
-#page_kateg { 
-  grid-area: kateg; 
-  }
-#page_katZ { 
-  grid-area: katZ; 
-  }
-#page_date { 
-  grid-area: date; 
-  }
-</style>
 <head>
 	<h1><br>Разметка отказов</h1>
 </head>
 <body>
+	<link rel="stylesheet" href="styles.css">
 	<div id="grid">
-	  <div id="page_mes_text">1</div>
-	  <div id="page_age">2</div>
-	  <div id="page_cause">3</div>
-	  <div id="page_vus">4</div>
-	  <div id="page_country">5</div>
-	  <div id="page_kpp">6</div>
-	  <div id="page_yService">7</div>
-	  <div id="page_voenk">8</div>
-	  <div id="page_kateg">9</div>
-	  <div id="page_katZ">10</div>
-	  <div id="page_date">11</div>
+		<div id="page_mes_text", class="grid_element">1</div>
+		<div id="page_casetype", class="grid_element">
+			Тип случая<br>
+			<input class="tgl tgl-flat" id="cb4" type="checkbox"/>
+			<label class="tgl-btn" for="cb4"></label>
+		</div>
+		<div id="page_age", class="grid_element">Возраст<br><input id = 'age'></div>
+		<div id="page_sex", class="grid_element">Пол<br><input id = 'sex'></div>
+		<div id="page_cause", class="grid_element">Причина отказа<br><input id = 'cause'></div>
+		<div id="page_army_relations", class="grid_element">Отношение к военной службе<br><input id = 'army_relations'></div>
+		<div id="page_vus", class="grid_element">Военно-учётная специальность<br><input id = 'vus'></div>
+		<div id="page_army_type", class="grid_element">Вид войск<br><input id = 'army_type'></div>
+		<div id="page_army_sec_type", class="grid_element">Род войск<br><input id = 'army_sec_type'></div>
+		<div id="page_army_other", class="grid_element">Другая информация о военной службе<br><input id = 'army_other'></div>
+		<div id="page_country", class="grid_element">Страна въезда<br><input id = 'country'></div>
+		<div id="page_kpp", class="grid_element">КПП Выезда<br><input id = 'kpp'></div>
+		<div id="page_yService", class="grid_element">Годы службы<br><input id = 'yService'></div>
+		<div id="page_voenk_region", class="grid_element">Военкомат (регион или город федерального значения)<br><input id = 'voenk_region'></div>
+		<div id="page_voenk_city", class="grid_element">Военкомат (город(а)/городской округ/район(ы) области)<br><input id = 'voenk_city'></div>
+		<div id="page_voenk_district", class="grid_element">Военкомат (район(ы) города)<br><input id = 'voenk_district'></div>
+		<div id="page_kategory_h", class="grid_element">Категория годности<br><input id = 'kategory_h'></div>
+		<div id="page_kategory_z", class="grid_element">Категория запаса<br><input id = 'kategory_z'></div>
+		<div id="page_date", class="grid_element">Дата<br><input id = 'date'></div>
+		<div id="page_btn_add", class="grid_element">
+			<button type="button", id = "add", class="btn">Добавить</button>
+		</div>
+		<div id="page_btn_add_next", class="grid_element">
+			<button type="button", class="btn", id = "add_next">К следующей записи</button>
+		</div>	
+		<div id="page_btn_vbros", class="grid_element">
+			<button type="button", class="btn", id = "vbros">Вброс</button>
+		</div>
 	</div>
 </body>

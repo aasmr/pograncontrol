@@ -113,7 +113,7 @@
               },
               title: {
                 display: true,
-                text: 'Отношение к службе тех, кому отказано в пересечении границы'
+                text: 'Отношение к службе тех, кому отказано в пересечении границы.'
               }
             }
           });
@@ -124,5 +124,155 @@
     });
 
   </script>
+  
+  <div id="container3" style="width: 75%;">
+    <canvas id="sex" data-url="{% url 'sex' %}"></canvas>
+  </div>
+  <script>
 
+    $(function () {
+
+      var $sexChart = $("#sex");
+      $.ajax({
+        url: $sexChart.data("url"),
+        success: function (data) {
+
+          var ctx = $sexChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                data: data.data,
+				backgroundColor: [
+					'rgb(255, 99, 132)',
+					'rgb(54, 162, 235)'					
+						],
+              }
+			  ]          
+            },
+            options: {
+				scales: {
+					},
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Пол тех, кому отказано в пересечении границы'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+  
+  <div id="container4" style="width: 100%;">
+    <canvas id="age" data-url="{% url 'age' %}"></canvas>
+  </div>
+    <script>
+
+    $(function () {
+
+      var $ageChart = $("#age");
+      $.ajax({
+        url: $ageChart.data("url"),
+        success: function (data) {
+
+          var ctx = $ageChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                label: 'Количество отказ',
+                backgroundColor: 'rgb(255, 99, 132)',
+                data: data.data
+
+              },
+			  ]          
+            },
+            options: {
+				scales: {
+					xAxes: [{
+						stacked: true
+						}],
+					yAxes: [{
+						stacked: true
+						}]
+					},
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'Распределение по возрасту в группе "отказ от военкоматов"'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
+  <div id="container5" style="width: 100%;">
+    <canvas id="kpp" data-url="{% url 'kpp' %}"></canvas>
+  </div>
+  <script>
+      $(function () {
+
+      var $kppChart = $("#kpp");
+      $.ajax({
+        url: $kppChart.data("url"),
+        success: function (data) {
+
+          var ctx = $kppChart[0].getContext("2d");
+
+          new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: data.labels,
+              datasets: [{
+                data: data.data,
+				backgroundColor: [
+					'rgb(255, 205, 86)',
+					'rgb(0, 255, 127)',
+					'rgb(54, 162, 235)',
+					'rgb(128, 128, 128)',
+					'rgb(255, 99, 132)',
+					'rgb(0, 0, 132)'
+						],
+              }
+			  ]          
+            },
+            options: {
+				scales: {
+					},
+              responsive: true,
+              legend: {
+                position: 'top',
+              },
+              title: {
+                display: true,
+                text: 'КПП'
+              }
+            }
+          });
+
+        }
+      });
+
+    });
+
+  </script>
 {% endblock %}
