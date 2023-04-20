@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Категоризация текста</title>
+    <link rel="stylesheet" href="styles_gpt.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h1>Длинный текст</h1>
+            <p>Здесь можно вывести длинный текст, который требует категоризации.</p>
+        </div>
+        <div class="right">
+            <h1>Форма для категоризации</h1>
+            <form id="category-form">
+                <div class="form-group">
+                    <label for="age">Возраст:</label>
+                    <input type="number" id="age" name="age" required>
+                </div>
+                <div class="form-group">
+                    <label for="sex">Пол:</label>
+                    <select id="sex" name="sex" required>
+                        <option value="">Выберите пол</option>
+                        <option value="М">Мужской</option>
+                        <option value="Ж">Женский</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cause">Причина отказа:</label>
+                    <input type="text" id="cause" name="cause" required>
+					<script>
+						$("#cause").autocomplete({
+						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
+						  });
+					</script>
+                </div>
+                <div class="form-group">
+                    <label for="attitude">Отношение к военной службе:</label>
+                    <input type="text" id="attitude" name="attitude" required>
+                </div>
+                <div class="form-group">
+                    <label for="specialty">Военно-учётная специальность:</label>
+                    <input type="text" id="specialty" name="specialty" required>
+                </div>
+                <div class="form-group">
+                    <label for="troops">Вид войск:</label>
+                    <input type="text" id="troops" name="troops" required>
+                </div>
+                <div class="form-group">
+                    <label for="branch">Род войск:</label>
+                    <input type="text" id="branch" name="branch" required>
+                </div>
+                <div class="form-group">
+                    <label for="other-info">Другая информация о военной службе:</label>
+                    <textarea id="other-info" name="other-info" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="country">Страна въезда:</label>
+                    <input type="text" id="country" name="country" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkpoint">КПП Выезда:</label>
+                    <input type="text" id="checkpoint" name="checkpoint" required>
+                </div>
+                <div class="form-group">
+                    <label for="years">Годы службы:</label>
+                    <input type="text" id="years" name="years" required>
+                </div>
+                <div class="form-group">
+                    <label for="military-office">Военкомат (регион или город федерального значения):</label>
+					<input type="text" id="military-office-region" name="military-office-region" required>
+				</div>
+				<div class="form-group">
+					<label for="military-office-city">Военкомат (город(а)/городской округ/район(ы) области):</label>
+					<input type="text" id="military-office-city" name="military-office-city" required>
+				</div>
+				<div class="form-group">
+					<label for="military-office-district">Военкомат (район(ы) города):</label>
+					<input type="text" id="military-office-district" name="military-office-district" required>
+				</div>
+				<div class="form-group">
+					<label for="fitness-category">Категория годности:</label>
+					<input type="text" id="fitness-category" name="fitness-category" required>
+				</div>
+				<div class="form-group">
+					<label for="reserve-category">Категория запаса:</label>
+					<input type="text" id="reserve-category" name="reserve-category" required>
+				</div>
+				<div class="form-group">
+					<label for="date">Дата:</label>
+					<input type="date" id="date" name="date" required>
+				</div>
+				<div class="form-buttons">
+					<button type="submit">Добавить</button>
+					<button type="button" id="skip-button">Пропустить</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

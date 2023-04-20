@@ -13,7 +13,7 @@ async def main(db_con):
     async for dialog in client.iter_dialogs():
         print(dialog.name, 'has ID', dialog.id)
     '''
-    date_offset = datetime(2022, 9, 20, tzinfo=None)
+    date_offset = datetime(2023, 3, 14, tzinfo=None)
     async for message in client.iter_messages(-1001776583381, offset_date = date_offset, reverse = True):
         #print(message.id, message.text)
         datetime_str=message.date.strftime('%Y-%m-%d %H:%M:%S')
@@ -22,7 +22,7 @@ async def main(db_con):
             cursor.execute(exist_query, (message.id, ))
             result = cursor.fetchall()
             if len(result) == 0:
-                insert_mes_query = """INSERT INTO messages_table VALUES (%s, "%s", %s);"""
+                insert_mes_query = """INSERT INTO messages_table VALUES (%s, %s, %s);"""
                 cursor.execute(insert_mes_query, (message.id, message.text, datetime_str))
                 db_con.commit()
             #print(result)
