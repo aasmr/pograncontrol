@@ -3,21 +3,25 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Категоризация текста</title>
+    <title>Разметка погранконтроля</title>
     <link rel="stylesheet" href="{% static 'styles.css'%}">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="{% static 'acmplt.js'%}"></script>
+	<script src="{% static 'form_control.js'%}"></script>
 	</head>
 <body>
     <div class="container">
         <div class="left">
-            <h1>Длинный текст</h1>
-            <p>Здесь можно вывести длинный текст, который требует категоризации.</p>
+            <h1>Размечено {{marked_cnt}} сообщений из {{all_cnt}}</h1>
+			<p>{{date}}</p>
+            <p>{{mes_text}}</p>
         </div>
         <div class="right">
             <h1>Форма для категоризации</h1>
             <form id="category-form">
+			{% csrf_token %}
 			<div class="form-group">
                     <label for="case-type">Тип случая:</label>
                     <select id="case-type" name="case-type" required>
@@ -28,11 +32,11 @@
                 </div>
                 <div class="form-group">
                     <label for="age">Возраст:</label>
-                    <input type="number" id="age" name="age" required>
+                    <input type="number" id="age" name="age">
                 </div>
                 <div class="form-group">
                     <label for="sex">Пол:</label>
-                    <select id="sex" name="sex" required>
+                    <select id="sex" name="sex">
                         <option value="">Выберите пол</option>
                         <option value="М">Мужской</option>
                         <option value="Ж">Женский</option>
@@ -40,142 +44,81 @@
                 </div>
                 <div class="form-group">
                     <label for="cause">Причина отказа:</label>
-                    <input type="text" id="cause" name="cause" required>
-					<script>
-						$("#cause").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="cause" name="cause">
                 </div>
                 <div class="form-group">
                     <label for="army-relations">Отношение к военной службе:</label>
-                    <input type="text" id="army-relations" name="army-relations" required>
-					<script>
-						$("#army-relations").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="army-relations" name="army-relations">
                 </div>
                 <div class="form-group">
                     <label for="vus">Военно-учётная специальность:</label>
-                    <input type="text" id="vus" name="vus" required>
-					<script>
-						$("vus").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="vus" name="vus">
                 </div>
                 <div class="form-group">
                     <label for="army-type">Вид войск:</label>
-                    <input type="text" id="army-type" name="army-type" required>
-					<script>
-						$("army-type").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="army-type" name="army-type">
                 </div>
                 <div class="form-group">
                     <label for="army-sec-type">Род войск:</label>
-                    <input type="text" id="army-sec-type" name="army-sec-type" required>
-					<script>
-						$("army-sec-type").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
-                </div>
-				
+                    <input type="text" id="army-sec-type" name="army-sec-type">
+                </div>				
                 <div class="form-group">
                     <label for="army-other">Другая информация о военной службе:</label>
-                    <input type="text" id="army-other" name="army-other" required>					
-					<script>
-						$("army-other").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="army-other" name="army-other">					
                 </div>
                 <div class="form-group">
                     <label for="country">Страна въезда:</label>
-                    <input type="text" id="country" name="country" required>					
-					<script>
-						$("country").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="country" name="country">					
                 </div>
                 <div class="form-group">
                     <label for="kpp">КПП Выезда:</label>
-                    <input type="text" id="kpp" name="kpp" required>					
-					<script>
-						$("kpp").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="kpp" name="kpp">					
                 </div>
                 <div class="form-group">
                     <label for="yService">Годы службы:</label>
-                    <input type="text" id="yService" name="yService" required>										
-					<script>
-						$("yService").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+                    <input type="text" id="yService" name="yService">										
                 </div>
                 <div class="form-group">
                     <label for="voenk-region">Военкомат (регион или город федерального значения):</label>
-					<input type="text" id="voenk-region" name="voenk-region" required>														
-					<script>
-						$("voenk-region").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+					<input type="text" id="voenk-region" name="voenk-region">														
 				</div>
 				<div class="form-group">
 					<label for="voenk-city">Военкомат (город(а)/городской округ/район(ы) области):</label>
-					<input type="text" id="voenk-city" name="voenk-city" required>														
-					<script>
-						$("voenk-city").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+					<input type="text" id="voenk-city" name="voenk-city">														
 				</div>
 				<div class="form-group">
 					<label for="voenk-district">Военкомат (район(ы) города):</label>
-					<input type="text" id="voenk-district" name="voenk-district" required>																	
-					<script>
-						$("voenk-district").autocomplete({
-						  source: ["Элемент 1", "Элемент 2", "Элемент 3", "Элемент 4", "Элемент 5"],
-						  });
-					</script>
+					<input type="text" id="voenk-district" name="voenk-district">																	
 				</div>
 				<div class="form-group">
 					<label for="kategoryH">Категория годности:</label>
-					<input type="text" id="fitness-category" name="fitness-category" required>
+					<input type="text" id="fitness-category" name="fitness-category">
 				</div>
 				<div class="form-group">
 					<label for="kategoryZ">Категория запаса:</label>
-					<input type="text" id="reserve-category" name="reserve-category" required>
+					<input type="text" id="reserve-category" name="reserve-category">
 				</div>
 				<div class="form-group">
 					<label for="date">Дата:</label>
-					<input type="text" id="date" name="date" required>
+					<input type="text" id="date" name="date" value = "{{date}}">
 				</div>
 				<div class="form-buttons">
-					<button type="add">Добавить</button>
+					<button type="button" id="add" data-url="{% url 'add' %}">Добавить</button>
 				</div>
 				<div class="form-buttons">
-					<button type="add-more">Добавить еще одну запись</button>
+					<button type="button" id="add-more" data-url="/add_more/">Добавить еще одну запись</button>
 				</div>
 				<div class="form-buttons">
-					<button type="pass" id="skip-button">Пропустить</button>
+					<button type="button" id="pass">Пропустить</button>
 				</div>
 				<div class="form-buttons">
-					<button type="vbros">Вброс</button>
+					<button type="button" id="vbros">Вброс</button>
 				</div>
 				<div class="form-buttons">
-					<button type="delete">Удалить это сообщение из БД</button>
+					<button type="button" id="delete">Удалить это сообщение из БД</button>
 				</div>
 				<div class="form-buttons">
-					<button type="show-all">Показать сообщение целиком</button>
+					<button type="button" id="show-all">Показать сообщение целиком</button>
 				</div>
 			</form>
 		</div>

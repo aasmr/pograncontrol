@@ -7,7 +7,8 @@
 </head>
 <body>
   <div class="container">
-    <form class="login-form" action="/login" method="post">
+    <form class="login-form" action="login/" method="post">
+	 {% csrf_token %}
       <h1 class="login-form__title">Вход</h1>
       <input class="login-form__input" type="text" placeholder="Имя пользователя" name="username" required>
       <input class="login-form__input" type="password" placeholder="Пароль" name="password" required>
