@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Авторизация</title>
+  <link rel="stylesheet" href="{% static 'auth.css'%}">
+</head>
+<body>
+  <div class="container">
+    <form class="login-form" action="/login" method="post">
+      <h1 class="login-form__title">Вход</h1>
+      <input class="login-form__input" type="text" placeholder="Имя пользователя" name="username" required>
+      <input class="login-form__input" type="password" placeholder="Пароль" name="password" required>
+      <button class="login-form__button" type="submit">Войти</button>
+      <p class="login-form__link"><a href="/register">Нет аккаунта?</a></p>
+    </form>
+  </div>
+</body>
+</html>
