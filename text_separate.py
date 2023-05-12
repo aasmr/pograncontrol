@@ -1,18 +1,20 @@
 import mysql.connector
 from pograncontrol.separate_ui import *
 from getpass import getpass
+from datetime import datetime
 
 class Signals(QObject):
-    mesDateSignal = Signal(str)
+    mesDateSignal = Signal(str, str)
     mesTxtSignal = Signal(str)
     def __init__(self):
         super().__init__()
 
 class PogranControl():
-    def __init__(self, mes_text, mes_id):
+    def __init__(self, mes_text, mes_id, mes_date):
         self.mes_text = mes_text
         self.mes_id = mes_id
         self.mes_count = 0
+        self.mes_date=mes_date
         
     def initUI(self):
         self.sg = Signals()
@@ -31,26 +33,34 @@ class PogranControl():
             self.mes_count +=1
             
         mesTextforUI = self.mes_text[self.mes_count]
+        mesDate = self.mes_date[self.mes_count].strftime('%Y-%m-%d %H:%M:%S')
         self.sg.mesTxtSignal.emit(mesTextforUI)
         msgCnt=str(self.mes_count) + '/' + str(len(self.mes_text))
-        self.sg.mesDateSignal.emit(msgCnt)
+        self.sg.mesDateSignal.emit(msgCnt, mesDate)
     
     def passText(self):
         write_db_messages_info(db_con, self.mes_id[self.mes_count], "pass")
         self.mes_count+=1
         self.startWorker()
-    @Slot(str)
-    def separateText(self, sep):
+    @Slot(str, str)
+    def separateText(self, sep, date):
+        if date == '':
+            date = None
+        else:
+            try:
+                dt_date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S') 
+            except:
+                dt_date = datetime.strptime(date, '%Y-%m-%d')   
         ls = self.mes_text[self.mes_count].split(sep)
         print(ls)
         for i in ls:
             if not ('Канал опытного переезжальщика - @kyrillic' in i) and not ('Как построить жизнь, карьеру и бизнес за рубежом: @berkovskaya_elena' in i):
-                write_db_case_text(db_con, self.mes_id[self.mes_count], i)
+                write_db_case_text(db_con, self.mes_id[self.mes_count], i, dt_date)
         self.mes_count+=1
         self.startWorker()    
         
     def writecase(self):
-        write_db_case_text(db_con, self.mes_id[self.mes_count], self.mes_text[self.mes_count])       
+        write_db_case_text(db_con, self.mes_id[self.mes_count], self.mes_text[self.mes_count], self.mes_date[self.mes_count])       
         self.mes_count+=1
         self.startWorker()
           
@@ -72,11 +82,13 @@ def read_db_messages_table(db_con):
         res = cursor.fetchall()
     msg_id = []
     msg_txt = []
+    msg_date = []
     for i in res:
         msg_id.append(i[0])
         msg_txt.append(i[1])
+        msg_date.append(i[2])
 
-    return msg_id, msg_txt
+    return msg_id, msg_txt, msg_date
 
 def check_db_case_text(db_con, msg_id):
         exist_query = """SELECT msg_id FROM case_text WHERE msg_id = %s;"""
@@ -100,10 +112,10 @@ def check_db_messages_info(db_con, msg_id):
                 return True
             else:
                 return False
-def write_db_case_text(db_con, msg_id, txt):
+def write_db_case_text(db_con, msg_id, txt, date):
         with db_con.cursor(buffered = True) as cursor:
-            insert_mes_query = """INSERT INTO case_text (msg_id, text) VALUES (%s, %s);"""
-            cursor.execute(insert_mes_query, (msg_id, txt))
+            insert_mes_query = """INSERT INTO case_text (msg_id, date, text) VALUES (%s, %s, %s);"""
+            cursor.execute(insert_mes_query, (msg_id, date, txt))
             db_con.commit()
 
 def write_db_messages_info(db_con, msg_id, tag):
@@ -116,7 +128,7 @@ if __name__ == '__main__':
     app = QApplication([])
     db_con = db_connect()
     res = read_db_messages_table(db_con)
-    pogranworker=PogranControl(res[1], res[0])
+    pogranworker=PogranControl(res[1], res[0], res[2])
     pogranworker.initUI()
     pogranworker.uiWorker.show()
     #pogranworker.startWorker()

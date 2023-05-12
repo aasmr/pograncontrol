@@ -103,6 +103,7 @@ class Case(models.Model):
 
 class CaseText(models.Model):
     msg_id = models.IntegerField()
+    date = models.DateField(blank=True, null=True)
     text = models.TextField(blank=True, null=True)
     tag = models.CharField(max_length=45, blank=True, null=True)
     author = models.CharField(max_length=45, blank=True, null=True)

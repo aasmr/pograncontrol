@@ -4,7 +4,7 @@ from PySide2.QtCore import *
 
 class Signals(QObject):
     endInitSignal = Signal()
-    writeSignal = Signal(str)
+    writeSignal = Signal(str, str)
     def __init__(self):
         super().__init__()
 
@@ -47,6 +47,9 @@ class ui(QWidget):
         self.sepLabel=QLabel(self)
         self.sepLabel.setText('Сепаратор:')
         self.sepText=QLineEdit(self)
+        self.dateLabel=QLabel(self)
+        self.dateLabel.setText('Дата:')
+        self.dateText=QLineEdit(self)
         self.passBut=QPushButton(self)
         self.passBut.setText("Пропустить")
         self.separate1But=QPushButton(self)
@@ -64,10 +67,12 @@ class ui(QWidget):
         self.textScroll.setWidget(self.mesText)
         self.gridBox.addWidget(self.sepLabel, 0, 2, 1, 1)
         self.gridBox.addWidget(self.sepText, 1, 2, 1, 1)
-        self.gridBox.addWidget(self.separate1But, 2, 2, 1, 1)
-        self.gridBox.addWidget(self.writeBut, 3, 2, 1, 1)
-        self.gridBox.addWidget(self.passBut, 4, 2, 1, 1)
-        self.gridBox.addWidget(self.exitBut, 5, 2, 1, 1)
+        self.gridBox.addWidget(self.dateLabel, 2, 2, 1, 1)
+        self.gridBox.addWidget(self.dateText, 3, 2, 1, 1)
+        self.gridBox.addWidget(self.separate1But, 4, 2, 1, 1)
+        self.gridBox.addWidget(self.writeBut, 5, 2, 1, 1)
+        self.gridBox.addWidget(self.passBut, 6, 2, 1, 1)
+        self.gridBox.addWidget(self.exitBut, 7, 2, 1, 1)
         
         self.setLayout(self.gridBox)
 
@@ -78,13 +83,16 @@ class ui(QWidget):
     def setMes(self, mes):
         self.mesText.setText(mes)
 	
-    @Slot(str)
-    def setDate(self, msgCnt):
+    @Slot(str, str)
+    def setDate(self, msgCnt, date):
         self.mesCntLabel.setText(msgCnt)
+        self.dateText.setText(date)
 
     def getInfo(self):
         sep = self.sepText.text()
-        self.sg.writeSignal.emit(sep)
+        date = self.dateText.text()
+        self.sg.writeSignal.emit(sep, date)
+        
         
         
 if __name__ == "__main__":

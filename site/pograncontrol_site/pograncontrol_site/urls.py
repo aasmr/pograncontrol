@@ -21,3 +21,4 @@ urlpatterns = [
     path('pogran_visualisation/', include('pogran_visualisation.urls')),
     path('razmetka/', include('razmetka.urls')),
 ]
+#path('pogran_visualisation/', include('pogran_visualisation.urls')),

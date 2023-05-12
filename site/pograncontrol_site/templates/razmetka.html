@@ -8,15 +8,14 @@
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<script src="{% static 'acmplt.js'%}"></script>
 	<script src="{% static 'form_control.js'%}"></script>
 	</head>
 <body>
     <div class="container">
         <div class="left">
-            <h1>Размечено {{marked_cnt}} сообщений из {{all_cnt}}</h1>
-			<p>{{date}}</p>
-            <p>{{mes_text}}</p>
+            <h1 id = "marked_text">Размечено {{marked_cnt}} сообщений из {{all_cnt}}</h1>
+			<p id="label_date"></p>
+			<p id="label_mestext"></p>
         </div>
         <div class="right">
             <h1>Форма для категоризации</h1>
@@ -28,6 +27,7 @@
                         <option value="">Выберите тип случая</option>
                         <option value="success">Удачный</option>
                         <option value="fail">Неудачный</option>
+						<option value="return">Возврат</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -92,33 +92,30 @@
 				</div>
 				<div class="form-group">
 					<label for="kategoryH">Категория годности:</label>
-					<input type="text" id="fitness-category" name="fitness-category">
+					<input type="text" id="kategoryH" name="kategoryH">
 				</div>
 				<div class="form-group">
 					<label for="kategoryZ">Категория запаса:</label>
-					<input type="text" id="reserve-category" name="reserve-category">
+					<input type="text" id="kategoryZ" name="kategoryZ">
 				</div>
 				<div class="form-group">
 					<label for="date">Дата:</label>
-					<input type="text" id="date" name="date" value = "{{date}}">
+					<input type="text" id="date" name="date" value = "" required>
 				</div>
 				<div class="form-buttons">
 					<button type="button" id="add" data-url="{% url 'add' %}">Добавить</button>
 				</div>
 				<div class="form-buttons">
-					<button type="button" id="add-more" data-url="/add_more/">Добавить еще одну запись</button>
+					<button type="button" id="add-more" data-url="{% url 'add-more' %}">Добавить еще одну запись</button>
 				</div>
 				<div class="form-buttons">
-					<button type="button" id="pass">Пропустить</button>
+					<button type="button" id="pass" data-url="{% url 'pass' %}">Пропустить</button>
 				</div>
 				<div class="form-buttons">
-					<button type="button" id="vbros">Вброс</button>
+					<button type="button" id="vbros" data-url="{% url 'vbros' %}">Вброс</button>
 				</div>
 				<div class="form-buttons">
-					<button type="button" id="delete">Удалить это сообщение из БД</button>
-				</div>
-				<div class="form-buttons">
-					<button type="button" id="show-all">Показать сообщение целиком</button>
+					<button type="button" id="del" data-url="{% url 'del' %}">Удалить запись</button>
 				</div>
 			</form>
 		</div>

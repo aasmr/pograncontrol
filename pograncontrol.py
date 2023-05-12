@@ -157,7 +157,7 @@ class PogranControl():
             mesTextforUI =  self.chat_mes[self.mes_count]
             msgCnt=str(self.mes_count+1) + '/' + str(len(self.chat_mes))
             self.sg.mesTxtSignal.emit(mesTextforUI)
-            self.sg.mesDateSignal.emit(self.dct_dtime[self.chat_mID[self.mes_count]].strftime('%Y-%m-%d %H:%M:%S'), msgCnt)
+            self.sg.mesDateSignal.emit(self.dct_dtime[self.mes_count].strftime('%Y-%m-%d %H:%M:%S'), msgCnt)
 
     @Slot(str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str, str)
     def writecase(self, case_type, sex, age, cause, army_relations, vus, army_type,
@@ -487,6 +487,7 @@ def read_db_case_text(db_con):
         
         id = []
         msg_id = []
+        date = []
         text = []
         tag = []
         author = []
@@ -494,10 +495,11 @@ def read_db_case_text(db_con):
         for i in result:
             id.append(i[0])
             msg_id.append(i[1])
-            text.append(i[2])
-            tag.append(i[3])
-            author.append(i[4])
-    return id, msg_id, text, tag, author                     
+            date.append(i[2])
+            text.append(i[3])
+            tag.append(i[4])
+            author.append(i[5])
+    return id, msg_id, date, text, tag, author                     
 
 def read_db_messages_table(db_con):
     exist_query = """SELECT * FROM messages_table;"""
@@ -549,7 +551,7 @@ if __name__ == '__main__':
                                res[18], res[19])
     res=read_db_case_text(conn)
     dct = read_db_messages_table(conn)
-    pogranworker.initChatLists(res[2], res[0], res[3], res[1], dct[0], dct[1])
+    pogranworker.initChatLists(res[3], res[0], res[4], res[1], dct[0], res[2])
     pogranworker.initUI()
     pogranworker.uiWorker.show()
     #pogranworker.startWorker()
