@@ -3,7 +3,7 @@ Research of the russian tg chat about crossing the border on unsuccessful cases 
 
 Исследование про чат "Пограничный контроль" - российского телеграмм-чата про пересечения границы на неудачные случаи пересеения границы
 ______
-Всем привет. Это мой проект исследования случаев пересечения россиянами российской границы с начала мобилизации. Предварительные результаты исследования можно посмотреть в моей статье на [VC.ru] (https://vc.ru/migrate/614458-v-preddverii-poslaniya-federalnomu-sobraniyu-i-v-chest-nastupayushchego-prazdnika-rasskazyvayu-kogo-ne-vypustili-zagranicu): 
+Всем привет. Это мой проект исследования случаев пересечения россиянами российской границы с начала мобилизации. Предварительные результаты исследования можно посмотреть в моей статье на [VC.ru](https://vc.ru/migrate/614458-v-preddverii-poslaniya-federalnomu-sobraniyu-i-v-chest-nastupayushchego-prazdnika-rasskazyvayu-kogo-ne-vypustili-zagranicu): 
 >*Все наработки из этого проекта доступны для свободного использования в рамках лицензий используемых фреймоворков. Можете еще и меня упомянуть, если будете где-то это использовать, хотя я сильно в этом сомневаюсь*
 ## На данный момент в репозитории:
 ### Приложение для разметки pograncotrol.py
