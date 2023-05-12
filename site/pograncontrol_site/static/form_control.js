@@ -46,6 +46,9 @@ function getDuplicate()
 	  
 	  dtInput = document.querySelector('input[name="kategoryZ"]');
 	  dtInput.value = response.kategoryz;
+	  
+	  dtInput = document.querySelector('input[name="date"]');
+	  dtInput.value = response.date;
 	}
 	});
 }

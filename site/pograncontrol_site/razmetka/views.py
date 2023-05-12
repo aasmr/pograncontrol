@@ -62,7 +62,8 @@ def get_duplicate(request):
         'yservice': duplicate.yservice,
         'voenk_region': duplicate.voenk_region,
         'kategoryh': duplicate.kategory_h,
-        'kategoryz': duplicate.kategory_z
+        'kategoryz': duplicate.kategory_z,
+        'date': duplicate.date
         }
     return JsonResponse(data=_data)
 @login_required
